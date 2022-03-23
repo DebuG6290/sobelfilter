@@ -4,7 +4,8 @@ import "./Home.css";
 
 const Home = () => {
   const [image, setImage] = useState(null);
-  const [filteredImage, setFilteredImage] = useState(null);
+  // const [filteredImage, setFilteredImage] = useState(null);
+  const POST_URL="http://127.0.0.1:8000/api/v1/post-image/";
   const [isError, setIsError] = useState(false);
   const [status, setStatus] = useState(false);
   const [resultantRecieved, setResultantRecieved] = useState(false);
@@ -29,9 +30,27 @@ const Home = () => {
       }
     }
   };
-  const handleClick=async ()=>{
+  const handleClick = async () => {
     //  fetch from api and set resultantImage to the recieved image
-  }
+    var formdata = new FormData();
+    formdata.append(
+      "image",
+      image,
+      "Sent.png"
+    );
+
+    var requestOptions = {
+      method: "POST",
+      body: formdata,
+      redirect: "follow",
+    };
+
+    const filteredImage=await fetch(POST_URL, requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+  };
+  setResultantImage(filteredImage);
 
   return (
     <div className="main-sect">
@@ -51,15 +70,17 @@ const Home = () => {
           <div>
             <div className="inpimg-sect">
               <h1 className="heading2">Uploaded Image</h1>
-              <img src={image} className="input-img" />
-              <button className="upload-btn" onClick={handleClick}>Convert Image</button>
+              <img src={image} className="input-img" alt="img"/>
+              <button className="upload-btn" onClick={handleClick}>
+                Convert Image
+              </button>
             </div>
           </div>
         ) : null}
         {resultantRecieved ? (
           <div className="resultant-sect">
             <h1 className="heading3">Resultant Image</h1>
-            <img src={filteredImage} className="output-img" />
+            <img src={resultantImage} className="output-img" alt="img"/>
           </div>
         ) : null}
       </div>
