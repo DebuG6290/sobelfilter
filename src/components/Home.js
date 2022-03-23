@@ -45,12 +45,11 @@ const Home = () => {
       redirect: "follow",
     };
 
-    const filteredImage=await fetch(POST_URL, requestOptions)
+    await fetch(POST_URL, requestOptions)
       .then((response) => response.text())
-      .then((result) => console.log(result))
+      .then((result) => setResultantImage(URL.createObjectURL(result)))
       .catch((error) => console.log("error", error));
   };
-  setResultantImage(filteredImage);
 
   return (
     <div className="main-sect">
